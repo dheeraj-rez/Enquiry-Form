@@ -1,0 +1,33 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: rezolut
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: app
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: Enquiry-Form
+
+provider:
+  name: aws
+  runtime: python3.12
+  environment:
+    NOTION_TOKEN: ${env:NOTION_TOKEN}
+    TOUR_DATABASE_ID: ${env:TOUR_DATABASE_ID}
+    CONTACT_DATABASE_ID: ${env:CONTACT_DATABASE_ID}
+    EMAIL_USER: ${env:EMAIL_USER}
+    EMAIL_PASS: ${env:EMAIL_PASS}
+
+functions:
+  enquiry_form:
+    handler: handler.handler_function
+    timeout: 30
+    description: "Form submission handler"
+    events:
+      - httpApi:
+          path: /submit
+          method: post
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
