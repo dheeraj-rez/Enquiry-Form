@@ -15,7 +15,7 @@ logger.setLevel(logging.INFO)
 load_dotenv()
 
 # Email configuration
-SMTP_SERVER = "smtp.gmail.com"
+SMTP_SERVER = "smtp.office365.com"
 SMTP_PORT = 587
 SENDER_EMAIL = os.getenv('EMAIL_USER') 
 SENDER_PASSWORD = os.getenv('EMAIL_PASS') 
@@ -79,8 +79,8 @@ def handler_function(event, context):
     It validates the input data, adds it to the Notion database, and sends a confirmation email.
     """
     try:
-        body = json.loads(event.get("body", "{}"))
-        query_param = event.get("queryStringParameters", {})
+        body = json.loads(event.get("body") or "{}")
+        query_param = event.get("queryStringParameters") or {}
         type_param = query_param.get("type", "")
 
         # Validate query parameters
